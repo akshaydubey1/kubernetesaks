@@ -1,4 +1,4 @@
-apiVersion: "rbac.istio.io/v1alpha1"
+apiVersion: rbac.istio.io/v1alpha1
 kind: ServiceRole
 metadata:
   name: hello-viewer
@@ -8,7 +8,7 @@ spec:
   - services: ["hello.default.svc.cluster.local"]
     methods: ["GET", "HEAD"]
 ---
-apiVersion: "rbac.istio.io/v1alpha1"
+apiVersion: rbac.istio.io/v1alpha1
 kind: ServiceRole
 metadata:
   name: world-viewer
@@ -18,7 +18,7 @@ spec:
   - services: ["world.default.svc.cluster.local"]
     methods: ["GET", "HEAD"]
 ---
-apiVersion: "rbac.istio.io/v1alpha1"
+apiVersion: rbac.istio.io/v1alpha1
 kind: ServiceRole
 metadata:
   name: world-2-viewer
@@ -28,7 +28,7 @@ spec:
   - services: ["world-2.default.svc.cluster.local"]
     methods: ["GET", "HEAD"]
 ---
-apiVersion: "rbac.istio.io/v1alpha1"
+apiVersion: rbac.istio.io/v1alpha1
 kind: ServiceRoleBinding
 metadata:
   name: istio-ingress-binding
@@ -41,7 +41,7 @@ spec:
     kind: ServiceRole
     name: "hello-viewer"
 ---
-apiVersion: "rbac.istio.io/v1alpha1"
+apiVersion: rbac.istio.io/v1alpha1
 kind: ServiceRoleBinding
 metadata:
   name: hello-user-binding
@@ -53,7 +53,7 @@ spec:
     kind: ServiceRole
     name: "world-viewer"
 ---
-apiVersion: "rbac.istio.io/v1alpha1"
+apiVersion: rbac.istio.io/v1alpha1
 kind: ServiceRoleBinding
 metadata:
   name: world-user-binding
@@ -82,12 +82,16 @@ metadata:
 ### helloworld.yaml deployments, including a serviceaccount
 ### for the hello deployment and the world deployment
 ###
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+      version: v1
   template:
     metadata:
       labels:
@@ -121,12 +125,16 @@ spec:
     port: 8080
     targetPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: world
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: world
+      version: v1
   template:
     metadata:
       labels:
@@ -160,12 +168,16 @@ spec:
     port: 8080
     targetPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: world-2
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: world-2
+      version: v1
   template:
     metadata:
       labels:
