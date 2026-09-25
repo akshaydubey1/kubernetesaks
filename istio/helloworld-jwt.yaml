@@ -45,12 +45,16 @@ spec:
         port:
           number: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+      version: v1
   template:
     metadata:
       labels:
@@ -81,12 +85,16 @@ spec:
     port: 8080
     targetPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+      version: v1
   template:
     metadata:
       labels:
